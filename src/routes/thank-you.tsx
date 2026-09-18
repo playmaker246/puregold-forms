@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 
-type Search = { name?: string; form?: string };
+type Search = { name?: string | undefined; form?: string | undefined };
 
 export const Route = createFileRoute("/thank-you")({
   validateSearch: (search: Record<string, unknown>): Search => ({
