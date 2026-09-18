@@ -45,9 +45,12 @@ function ThankYou() {
       </p>
       <p className="mt-8 text-base font-medium text-foreground">While you wait, watch this 1-minute video:</p>
 
-      <div className="mt-6 aspect-video w-full overflow-hidden rounded-2xl bg-foreground/95">
-        <div className="flex h-full items-center justify-center px-6 text-sm text-background/70">
-          Video coming soon — send me the link and I'll drop it in here.
+      <div className="mt-6 aspect-video w-full overflow-hidden rounded-2xl border border-border bg-foreground/95">
+        <div className="flex h-full flex-col items-center justify-center gap-3 px-6 text-center">
+          <span className="flex h-14 w-14 items-center justify-center rounded-full bg-accent text-accent-foreground">
+            ▶
+          </span>
+          <p className="text-sm text-background/80">Video coming soon</p>
         </div>
       </div>
 
