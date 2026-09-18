@@ -39,7 +39,7 @@ export const submitLead = createServerFn({ method: "POST" })
     }
 
     const res = await fetch(
-      `${GATEWAY}/spreadsheets/${SPREADSHEET_ID}/values/${config.tab}!A1:append?valueInputOption=RAW&insertDataOption=INSERT_ROWS`,
+      `${GATEWAY}/spreadsheets/${SPREADSHEET_IDS[data.slug]}/values/${config.tab}!A1:append?valueInputOption=RAW&insertDataOption=INSERT_ROWS`,
       {
         method: "POST",
         headers: {
