@@ -14,9 +14,10 @@ export const Route = createFileRoute("/printing")({
       },
       { property: "og:title", content: "General Printing Enquiry — Puregold Prints" },
       {
-        name: "og:description",
+        property: "og:description",
         content: "Tell Puregold Prints what you need printed and a specialist will follow up on WhatsApp.",
       },
+      { name: "robots", content: "noindex" },
     ],
   }),
   component: PrintingPage,

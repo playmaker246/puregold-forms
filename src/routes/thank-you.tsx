@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 
 type Search = { name?: string | undefined; form?: string | undefined };
 
@@ -54,12 +54,9 @@ function ThankYou() {
         </div>
       </div>
 
-      <Link
-        to="/"
-        className="mt-12 inline-block text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
-      >
-        Back to Puregold Forms
-      </Link>
+      <p className="mt-12 text-xs uppercase tracking-[0.25em] text-muted-foreground">
+        Puregold Prints
+      </p>
     </main>
   );
 }

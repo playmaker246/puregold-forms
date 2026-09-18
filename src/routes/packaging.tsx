@@ -14,9 +14,10 @@ export const Route = createFileRoute("/packaging")({
       },
       { property: "og:title", content: "Food Packaging Enquiry — Puregold Prints" },
       {
-        name: "og:description",
+        property: "og:description",
         content: "Tell Puregold Prints about your food brand and get packaging recommendations.",
       },
+      { name: "robots", content: "noindex" },
     ],
   }),
   component: PackagingPage,
