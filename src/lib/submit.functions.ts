@@ -2,7 +2,10 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { forms } from "./forms";
 
-const SPREADSHEET_ID = "1QIZO8oGTTWIF4P8tUDxSM_znDJ6uFxu-k4U9umhr1vQ";
+const SPREADSHEET_IDS = {
+  printing: "1ofcn-E4yJA5yzdOz5nAKnNzG6c73Dx9v-2MN1jofLsk",
+  packaging: "1swB1TZG8qc0wrmkx-923GXmg6sNnH24eGZbTfxH5Zxw",
+} as const;
 const GATEWAY = "https://connector-gateway.lovable.dev/google_sheets/v4";
 
 const schema = z.object({
@@ -36,7 +39,7 @@ export const submitLead = createServerFn({ method: "POST" })
     }
 
     const res = await fetch(
-      `${GATEWAY}/spreadsheets/${SPREADSHEET_ID}/values/${config.tab}!A1:append?valueInputOption=RAW&insertDataOption=INSERT_ROWS`,
+      `${GATEWAY}/spreadsheets/${SPREADSHEET_IDS[data.slug]}/values/${config.tab}!A1:append?valueInputOption=RAW&insertDataOption=INSERT_ROWS`,
       {
         method: "POST",
         headers: {
