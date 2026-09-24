@@ -55,6 +55,11 @@ export function FormFlow({ config }: { config: FormConfig }) {
         setError(res.error);
         return;
       }
+      const fbq = (window as unknown as { fbq?: (...args: unknown[]) => void }).fbq;
+      fbq?.("track", "Lead", {
+        content_name: "PureGold Free Sample Request",
+        content_category: "Lead Form",
+      });
       navigate({ to: "/thank-you", search: { name: res.name, form: config.slug } });
     } catch (e) {
       console.error(e);
