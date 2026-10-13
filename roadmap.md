@@ -1,3 +1,3 @@
-- [ ] Replace thank-you copy and remove the video placeholder.
-- [ ] Verify submissions reach both separate Google Sheets and remove test entries.
-- [ ] Apply the required package security update and check the app.
+- [x] Replace thank-you copy and remove the video placeholder.
+- [x] Verify submissions reach both separate Google Sheets and remove test entries.
+- [x] Apply the required package security update and check the app.
