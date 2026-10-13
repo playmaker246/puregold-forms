@@ -13,6 +13,8 @@ export const Route = createFileRoute("/")({
         property: "og:description",
         content: "Puregold Prints — printing and food packaging for Nigerian brands.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex" },
     ],
   }),
