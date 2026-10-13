@@ -1,3 +1,4 @@
 - [x] Replace thank-you copy and remove the video placeholder.
 - [x] Verify submissions reach both separate Google Sheets and remove test entries.
 - [x] Apply the required package security update and check the app.
+- [ ] Add and test immediate team emails after either Google Sheet save, including form name and answers. Blocked on sender domain setup.
