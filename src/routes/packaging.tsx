@@ -17,6 +17,8 @@ export const Route = createFileRoute("/packaging")({
         property: "og:description",
         content: "Tell Puregold Prints about your food brand and get packaging recommendations.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex" },
     ],
   }),

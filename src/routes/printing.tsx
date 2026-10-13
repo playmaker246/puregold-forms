@@ -17,6 +17,8 @@ export const Route = createFileRoute("/printing")({
         property: "og:description",
         content: "Tell Puregold Prints what you need printed and a specialist will follow up on WhatsApp.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex" },
     ],
   }),

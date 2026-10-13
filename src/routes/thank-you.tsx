@@ -13,13 +13,15 @@ export const Route = createFileRoute("/thank-you")({
       {
         name: "description",
         content:
-          "Your enquiry is in. A Puregold packaging or printing specialist will review your answers and contact you on WhatsApp within 24–48 hours.",
+          "Your details are in. A Puregold printing specialist is reviewing your answers and will contact you on WhatsApp as soon as possible.",
       },
       { property: "og:title", content: "Thanks — We've received your details" },
       {
         property: "og:description",
-        content: "A Puregold specialist will contact you on WhatsApp within 24–48 hours.",
+        content: "A Puregold printing specialist is reviewing your answers and will contact you on WhatsApp as soon as possible.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex" },
     ],
   }),
@@ -27,32 +29,26 @@ export const Route = createFileRoute("/thank-you")({
 });
 
 function ThankYou() {
-  const { name, form } = Route.useSearch();
-  const specialist = form === "packaging" ? "packaging" : "printing";
-  const firstName = (name ?? "").trim().split(" ")[0];
-
   return (
     <main className="mx-auto max-w-2xl px-6 py-20 text-center sm:py-28">
       <span className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-accent text-lg text-accent-foreground">
         ✓
       </span>
       <h1 className="mt-8 text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
-        {firstName ? `Thanks, ${firstName}.` : "Thanks."} We've received your details.
+        Thanks! We've received your details.
       </h1>
       <p className="mt-6 text-base leading-relaxed text-muted-foreground">
-        A {specialist} specialist will review your answers and contact you on WhatsApp within 24–48
-        hours.
+        A printing specialist is reviewing your answers right now to see if your brand is a fit for our services.
       </p>
-      <p className="mt-8 text-base font-medium text-foreground">While you wait, watch this 1-minute video:</p>
-
-      <div className="mt-6 aspect-video w-full overflow-hidden rounded-2xl border border-border bg-foreground/95">
-        <div className="flex h-full flex-col items-center justify-center gap-3 px-6 text-center">
-          <span className="flex h-14 w-14 items-center justify-center rounded-full bg-accent text-accent-foreground">
-            ▶
-          </span>
-          <p className="text-sm text-background/80">Video coming soon</p>
-        </div>
-      </div>
+      <p className="mt-8 text-base font-medium leading-relaxed text-foreground">
+        What happens next? We will contact you on WhatsApp as soon as possible.
+      </p>
+      <p className="mt-6 text-base leading-relaxed text-muted-foreground">
+        If you filled this out during the day, expect a message within a few hours. If you filled this out at night, we will reach out first thing the next morning.
+      </p>
+      <p className="mt-6 text-base leading-relaxed text-muted-foreground">
+        Please keep your phone nearby. If you don't save our number when we message you, it might go to your 'Message Requests' folder and get lost.
+      </p>
 
       <p className="mt-12 text-xs uppercase tracking-[0.25em] text-muted-foreground">
         Puregold Prints
