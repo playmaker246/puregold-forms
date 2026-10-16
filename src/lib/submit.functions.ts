@@ -57,5 +57,15 @@ export const submitLead = createServerFn({ method: "POST" })
       return { ok: false as const, error: "We couldn't save your answers. Please try again." };
     }
 
+    try {
+      const { notifyTeam } = await import("./notify.server");
+      await notifyTeam(
+        data.slug === "printing" ? "General Printing" : "Food Packaging",
+        config.fields.map((f) => ({ label: f.label, value: (answers[f.id] ?? "").toString() })),
+      );
+    } catch (e) {
+      console.error("Team notification failed", e);
+    }
+
     return { ok: true as const, name };
   });
