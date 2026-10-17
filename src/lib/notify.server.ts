@@ -3,7 +3,7 @@ const GMAIL = "https://connector-gateway.lovable.dev/google_mail/gmail/v1";
 export const TEAM_RECIPIENTS = [
   "ogagabedekemo952@gmail.com",
   "tbedekemo@gmail.com",
-  "rubiesfishries@gmail.com",
+  "rubiesfisheries@gmail.com",
 ];
 
 const b64 = (s: string) =>
