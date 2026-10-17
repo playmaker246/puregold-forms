@@ -3,6 +3,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { chunkFields, visibleFields, type FormConfig, type FormField } from "@/lib/forms";
 import { submitLead } from "@/lib/submit.functions";
+import { logFormEvent } from "@/lib/form-events";
 
 const OTHER = "__other__";
 
@@ -51,6 +52,7 @@ export function FormFlow({ config }: { config: FormConfig }) {
     }
     if (!isLast) {
       track(`form_screen_${step + 1}_complete`);
+      void logFormEvent(`form_screen_${step + 1}_complete`);
       setStep((s) => s + 1);
       window.scrollTo({ top: 0, behavior: "smooth" });
       return;
@@ -64,6 +66,8 @@ export function FormFlow({ config }: { config: FormConfig }) {
       }
       track(`form_screen_${step + 1}_complete`);
       track("form_submit");
+      void logFormEvent(`form_screen_${step + 1}_complete`);
+      void logFormEvent("form_submit");
       const fbq = (window as unknown as { fbq?: (...args: unknown[]) => void }).fbq;
       fbq?.("track", "Lead", {
         content_name: "PureGold Free Sample Request",
