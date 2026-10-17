@@ -2,3 +2,5 @@
 - [x] Verify submissions reach both separate Google Sheets and remove test entries.
 - [x] Apply the required package security update and check the app.
 - [x] Team emails via Gmail after each sheet save.
+- [ ] Add insert-only Supabase funnel events and privacy-safe logging for both forms.
+- [ ] Test event validation, access restrictions and successful form flows.
