@@ -14,6 +14,45 @@ export type Database = {
   }
   public: {
     Tables: {
+      form_events: {
+        Row: {
+          event_name: string
+          fbclid: string | null
+          id: string
+          metadata: Json
+          occurred_at: string
+          page_path: string | null
+          session_id: string
+          utm_campaign: string | null
+          utm_medium: string | null
+          utm_source: string | null
+        }
+        Insert: {
+          event_name: string
+          fbclid?: string | null
+          id?: string
+          metadata?: Json
+          occurred_at?: string
+          page_path?: string | null
+          session_id: string
+          utm_campaign?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+        }
+        Update: {
+          event_name?: string
+          fbclid?: string | null
+          id?: string
+          metadata?: Json
+          occurred_at?: string
+          page_path?: string | null
+          session_id?: string
+          utm_campaign?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+        }
+        Relationships: []
+      }
       Post: {
         Row: {
           authorId: string
