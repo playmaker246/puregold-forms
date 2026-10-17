@@ -17,8 +17,8 @@ describe("private funnel events", () => {
   });
 
   test("persists and reuses an anonymous UUID, replacing invalid stored values", () => {
-    const values = new Map<string, string>([[SESSION_STORAGE_KEY, "person@example.com"]]);
-    const storage = { getItem: (key: string) => values.get(key) ?? null, setItem: (key: string, value: string) => { values.set(key, value); } };
+    const values = new Map([[SESSION_STORAGE_KEY, "person@example.com"]]);
+    const storage = { getItem: (key) => values.get(key) ?? null, setItem: (key, value) => { values.set(key, value); } };
     expect(getAnonymousSessionId(storage, () => sessionId)).toBe(sessionId);
     expect(values.get(SESSION_STORAGE_KEY)).toBe(sessionId);
     expect(getAnonymousSessionId(storage, () => "must-not-be-used")).toBe(sessionId);
