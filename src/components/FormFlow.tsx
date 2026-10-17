@@ -38,12 +38,19 @@ export function FormFlow({ config }: { config: FormConfig }) {
     return !v || !v.trim();
   });
 
+  const track = (name: string) => {
+    if (config.slug !== "packaging") return;
+    const gtag = (window as unknown as { gtag?: (...args: unknown[]) => void }).gtag;
+    gtag?.("event", name, { form: config.slug, total_screens: steps.length });
+  };
+
   const goNext = async () => {
     if (missing.length > 0) {
       setError("Please answer the question(s) above to continue.");
       return;
     }
     if (!isLast) {
+      track(`form_screen_${step + 1}_complete`);
       setStep((s) => s + 1);
       window.scrollTo({ top: 0, behavior: "smooth" });
       return;
@@ -55,6 +62,8 @@ export function FormFlow({ config }: { config: FormConfig }) {
         setError(res.error);
         return;
       }
+      track(`form_screen_${step + 1}_complete`);
+      track("form_submit");
       const fbq = (window as unknown as { fbq?: (...args: unknown[]) => void }).fbq;
       fbq?.("track", "Lead", {
         content_name: "PureGold Free Sample Request",
