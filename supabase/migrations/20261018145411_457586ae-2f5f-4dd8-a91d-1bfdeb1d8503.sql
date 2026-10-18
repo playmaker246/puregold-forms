@@ -1,0 +1,1 @@
+DELETE FROM public.form_events WHERE session_id IN ('27e39772-22e9-407e-ba95-a4d063009c1c','3dd11acc-c4b5-4ddc-8ba6-72a67c61e001','a7c2a847-7190-4867-a1e4-1299d3690f84','e7217f3f-3b30-4e85-b44a-782b8de89c8d') AND utm_source='funnel_check' AND utm_campaign='verification' AND occurred_at >= '2026-10-18T14:29:00Z';
