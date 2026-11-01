@@ -29,6 +29,7 @@ export const Route = createFileRoute("/thank-you")({
 });
 
 function ThankYou() {
+  const { form } = Route.useSearch();
   return (
     <main className="mx-auto max-w-2xl px-6 py-20 text-center sm:py-28">
       <span className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-accent text-lg text-accent-foreground">
