@@ -239,6 +239,18 @@ export function FormFlow({ config }: { config: FormConfig }) {
 
       {error && <p className="mt-4 text-sm text-destructive">{error}</p>}
 
+      {isPackaging && isLast && (
+        <div className="mt-6 space-y-1 rounded-lg border border-border/60 bg-secondary/40 px-4 py-3">
+          <p className="text-sm leading-relaxed text-muted-foreground">
+            You're almost done. Submit your enquiry and we'll use your answers to prepare for the follow-up.
+          </p>
+          <p className="text-sm leading-relaxed text-muted-foreground">
+            Almost done. Submit your details and our packaging specialist will contact you to discuss your
+            products and the best packaging option.
+          </p>
+        </div>
+      )}
+
       <div className="mt-8 flex items-center justify-between gap-4">
         <button
           type="button"
