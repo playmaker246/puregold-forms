@@ -29,6 +29,7 @@ export const Route = createFileRoute("/thank-you")({
 });
 
 function ThankYou() {
+  const { form } = Route.useSearch();
   return (
     <main className="mx-auto max-w-2xl px-6 py-20 text-center sm:py-28">
       <span className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-accent text-lg text-accent-foreground">
@@ -40,6 +41,12 @@ function ThankYou() {
       <p className="mt-6 text-base leading-relaxed text-muted-foreground">
         A printing specialist is reviewing your answers right now to see if your brand is a fit for our services.
       </p>
+      {form === "packaging" && (
+        <p className="mt-4 text-base font-medium leading-relaxed text-foreground">
+          Thank you. We've received your enquiry. A PureGold Prints packaging specialist will contact you
+          shortly to discuss your products and packaging needs.
+        </p>
+      )}
       <p className="mt-8 text-base font-medium leading-relaxed text-foreground">
         What happens next? We will contact you on WhatsApp as soon as possible.
       </p>

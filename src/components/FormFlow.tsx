@@ -20,6 +20,22 @@ export function FormFlow({ config }: { config: FormConfig }) {
   const current = steps[Math.min(step, steps.length - 1)] ?? [];
   const isLast = step >= steps.length - 1;
 
+  const isPackaging = config.slug === "packaging";
+  const reassurance = isPackaging
+    ? ["", "Good start — you're on your way.", "You're halfway there.", "Almost through — just a little more information."][
+        Math.min(step, 3)
+      ]
+    : null;
+  const nextLabel = isPackaging
+    ? step === 0
+      ? "Start enquiry"
+      : isLast
+        ? "Submit enquiry"
+        : "Continue"
+    : isLast
+      ? "Submit"
+      : "Next";
+
   const set = (id: string, value: string) => {
     setAnswers((a) => ({ ...a, [id]: value }));
     setError(null);
@@ -84,6 +100,12 @@ export function FormFlow({ config }: { config: FormConfig }) {
 
   return (
     <div>
+      {isPackaging && step === 0 && (
+        <p className="mb-6 text-sm leading-relaxed text-muted-foreground/80">
+          Answer a few quick questions so we can understand your business. It takes less than 2 minutes,
+          and your answers will help us recommend the best packaging direction for you.
+        </p>
+      )}
       <div className="flex items-center gap-2" aria-hidden>
         {steps.map((_, i) => (
           <div key={i} className="flex flex-1 items-center gap-2 last:flex-none">
@@ -101,6 +123,9 @@ export function FormFlow({ config }: { config: FormConfig }) {
       <p className="mt-4 text-xs uppercase tracking-[0.2em] text-muted-foreground">
         Step {step + 1} of {steps.length}
       </p>
+      {reassurance && (
+        <p className="mt-2 text-sm italic text-muted-foreground/80">{reassurance}</p>
+      )}
 
       <div className="mt-6 space-y-5">
         {current.map((f) => (
@@ -214,6 +239,18 @@ export function FormFlow({ config }: { config: FormConfig }) {
 
       {error && <p className="mt-4 text-sm text-destructive">{error}</p>}
 
+      {isPackaging && isLast && (
+        <div className="mt-6 space-y-1 rounded-lg border border-border/60 bg-secondary/40 px-4 py-3">
+          <p className="text-sm leading-relaxed text-muted-foreground">
+            You're almost done. Submit your enquiry and we'll use your answers to prepare for the follow-up.
+          </p>
+          <p className="text-sm leading-relaxed text-muted-foreground">
+            Almost done. Submit your details and our packaging specialist will contact you to discuss your
+            products and the best packaging option.
+          </p>
+        </div>
+      )}
+
       <div className="mt-8 flex items-center justify-between gap-4">
         <button
           type="button"
@@ -229,7 +266,7 @@ export function FormFlow({ config }: { config: FormConfig }) {
           disabled={sending}
           className="rounded-lg bg-accent px-8 py-3 text-sm font-medium text-accent-foreground transition hover:brightness-95 disabled:opacity-60"
         >
-          {sending ? "Sending…" : isLast ? "Submit" : "Next"}
+          {sending ? "Sending…" : nextLabel}
         </button>
       </div>
     </div>
