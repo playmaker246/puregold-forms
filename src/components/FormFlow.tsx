@@ -266,7 +266,7 @@ export function FormFlow({ config }: { config: FormConfig }) {
           disabled={sending}
           className="rounded-lg bg-accent px-8 py-3 text-sm font-medium text-accent-foreground transition hover:brightness-95 disabled:opacity-60"
         >
-          {sending ? "Sending…" : isLast ? "Submit" : "Next"}
+          {sending ? "Sending…" : nextLabel}
         </button>
       </div>
     </div>
