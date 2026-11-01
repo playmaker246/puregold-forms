@@ -40,6 +40,12 @@ function ThankYou() {
       <p className="mt-6 text-base leading-relaxed text-muted-foreground">
         A printing specialist is reviewing your answers right now to see if your brand is a fit for our services.
       </p>
+      {form === "packaging" && (
+        <p className="mt-4 text-base font-medium leading-relaxed text-foreground">
+          Thank you. We've received your enquiry. A PureGold Prints packaging specialist will contact you
+          shortly to discuss your products and packaging needs.
+        </p>
+      )}
       <p className="mt-8 text-base font-medium leading-relaxed text-foreground">
         What happens next? We will contact you on WhatsApp as soon as possible.
       </p>
