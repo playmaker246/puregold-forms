@@ -100,6 +100,12 @@ export function FormFlow({ config }: { config: FormConfig }) {
 
   return (
     <div>
+      {isPackaging && step === 0 && (
+        <p className="mb-6 text-sm leading-relaxed text-muted-foreground/80">
+          Answer a few quick questions so we can understand your business. It takes less than 2 minutes,
+          and your answers will help us recommend the best packaging direction for you.
+        </p>
+      )}
       <div className="flex items-center gap-2" aria-hidden>
         {steps.map((_, i) => (
           <div key={i} className="flex flex-1 items-center gap-2 last:flex-none">
@@ -117,6 +123,9 @@ export function FormFlow({ config }: { config: FormConfig }) {
       <p className="mt-4 text-xs uppercase tracking-[0.2em] text-muted-foreground">
         Step {step + 1} of {steps.length}
       </p>
+      {reassurance && (
+        <p className="mt-2 text-sm italic text-muted-foreground/80">{reassurance}</p>
+      )}
 
       <div className="mt-6 space-y-5">
         {current.map((f) => (
