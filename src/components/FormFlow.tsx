@@ -20,6 +20,22 @@ export function FormFlow({ config }: { config: FormConfig }) {
   const current = steps[Math.min(step, steps.length - 1)] ?? [];
   const isLast = step >= steps.length - 1;
 
+  const isPackaging = config.slug === "packaging";
+  const reassurance = isPackaging
+    ? ["", "Good start — you're on your way.", "You're halfway there.", "Almost through — just a little more information."][
+        Math.min(step, 3)
+      ]
+    : null;
+  const nextLabel = isPackaging
+    ? step === 0
+      ? "Start enquiry"
+      : isLast
+        ? "Submit enquiry"
+        : "Continue"
+    : isLast
+      ? "Submit"
+      : "Next";
+
   const set = (id: string, value: string) => {
     setAnswers((a) => ({ ...a, [id]: value }));
     setError(null);
