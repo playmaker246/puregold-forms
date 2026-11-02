@@ -1,15 +1,17 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { forms } from "./forms";
+import { expressAnswersSchema } from "./express-validation";
 
 const SPREADSHEET_IDS = {
   printing: "1ofcn-E4yJA5yzdOz5nAKnNzG6c73Dx9v-2MN1jofLsk",
   packaging: "1swB1TZG8qc0wrmkx-923GXmg6sNnH24eGZbTfxH5Zxw",
+  "express-printing": "1HE4NuScKFlILSe9RfXe0zJVN8TDKiHploxnUag_ctt8",
 } as const;
 const GATEWAY = "https://connector-gateway.lovable.dev/google_sheets/v4";
 
 const schema = z.object({
-  slug: z.enum(["printing", "packaging"]),
+  slug: z.enum(["printing", "packaging", "express-printing"]),
   answers: z.record(z.string(), z.string().max(1000)),
 });
 
@@ -17,12 +19,19 @@ export const submitLead = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => schema.parse(data))
   .handler(async ({ data }) => {
     const config = forms[data.slug];
-    const answers = data.answers;
+    let answers: Record<string, string> = data.answers;
+    if (data.slug === "express-printing") {
+      const validated = expressAnswersSchema.safeParse(answers);
+      if (!validated.success) {
+        return { ok: false as const, error: validated.error.issues[0]?.message ?? "Please check your answers." };
+      }
+      answers = validated.data;
+    }
 
     const name = (answers["name"] ?? "").trim();
     const whatsapp = (answers["whatsapp"] ?? "").trim();
     const business = (answers["business"] ?? "").trim();
-    if (!name || !whatsapp || !business) {
+    if (!name || !whatsapp || (data.slug !== "express-printing" && !business)) {
       return { ok: false as const, error: "Name, WhatsApp number and business name are required." };
     }
 
@@ -60,7 +69,7 @@ export const submitLead = createServerFn({ method: "POST" })
     try {
       const { notifyTeam } = await import("./notify.server");
       await notifyTeam(
-        data.slug === "printing" ? "General Printing" : "Food Packaging",
+        config.title,
         config.fields.map((f) => ({ label: f.label, value: (answers[f.id] ?? "").toString() })),
       );
     } catch (e) {

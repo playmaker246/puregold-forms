@@ -1,7 +1,9 @@
 import { useMemo, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { chunkFields, visibleFields, type FormConfig, type FormField } from "@/lib/forms";
+import { formScreens, type FormConfig, type FormField } from "@/lib/forms";
+import { expressScreenError } from "@/lib/express-validation";
+import { Button } from "@/components/ui/button";
 import { submitLead } from "@/lib/submit.functions";
 import { logFormEvent } from "@/lib/form-events";
 
@@ -16,7 +18,7 @@ export function FormFlow({ config }: { config: FormConfig }) {
   const [error, setError] = useState<string | null>(null);
   const [sending, setSending] = useState(false);
 
-  const steps = useMemo(() => chunkFields(visibleFields(config, answers)), [config, answers]);
+  const steps = useMemo(() => formScreens(config, answers), [config, answers]);
   const current = steps[Math.min(step, steps.length - 1)] ?? [];
   const isLast = step >= steps.length - 1;
 
@@ -62,6 +64,14 @@ export function FormFlow({ config }: { config: FormConfig }) {
   };
 
   const goNext = async () => {
+    if (sending) return;
+    if (config.slug === "express-printing") {
+      const validationError = expressScreenError(answers, current.map((f) => f.id));
+      if (validationError) {
+        setError(validationError);
+        return;
+      }
+    }
     if (missing.length > 0) {
       setError("Please answer the question(s) above to continue.");
       return;
@@ -89,7 +99,11 @@ export function FormFlow({ config }: { config: FormConfig }) {
         content_name: "PureGold Free Sample Request",
         content_category: "Lead Form",
       });
-      navigate({ to: "/thank-you", search: { name: res.name, form: config.slug } });
+      if (config.slug === "express-printing") {
+        navigate({ to: "/express-printing/thank-you" });
+      } else {
+        navigate({ to: "/thank-you", search: { name: res.name, form: config.slug } });
+      }
     } catch (e) {
       console.error(e);
       setError("Something went wrong. Please try again.");
@@ -143,15 +157,29 @@ export function FormFlow({ config }: { config: FormConfig }) {
             {f.help && <p className="mt-1 text-sm text-muted-foreground">{f.help}</p>}
 
             <div className="mt-4 space-y-2">
-              {(f.type === "text" || f.type === "tel") && (
+              {(f.type === "text" || f.type === "tel" || f.type === "number") && (
                 <input
-                  type={f.type === "tel" ? "tel" : "text"}
+                  type={f.type === "number" ? "number" : f.type === "tel" ? "tel" : "text"}
+                  inputMode={f.type === "number" ? "numeric" : undefined}
+                  aria-label={f.label}
                   value={answers[f.id] ?? ""}
                   maxLength={200}
                   placeholder={f.placeholder}
                   onChange={(e) => set(f.id, e.target.value)}
                   className="w-full rounded-lg border border-input bg-background px-4 py-3 text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-ring/40"
                 />
+              )}
+
+              {f.type === "select" && (
+                <select
+                  aria-label={f.label}
+                  value={answers[f.id] ?? ""}
+                  onChange={(e) => set(f.id, e.target.value)}
+                  className="w-full min-w-0 rounded-lg border border-input bg-background px-4 py-3 text-sm text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-ring/40"
+                >
+                  <option value="" disabled>Select an option</option>
+                  {f.options?.map((opt) => <option key={opt} value={opt}>{opt}</option>)}
+                </select>
               )}
 
               {f.type === "textarea" && (
@@ -252,22 +280,23 @@ export function FormFlow({ config }: { config: FormConfig }) {
       )}
 
       <div className="mt-8 flex items-center justify-between gap-4">
-        <button
+        <Button
+          variant="ghost"
           type="button"
           onClick={() => setStep((s) => Math.max(0, s - 1))}
           disabled={step === 0 || sending}
           className="text-sm text-muted-foreground transition hover:text-foreground disabled:opacity-0"
         >
           Back
-        </button>
-        <button
+        </Button>
+        <Button
           type="button"
           onClick={goNext}
           disabled={sending}
-          className="rounded-lg bg-accent px-8 py-3 text-sm font-medium text-accent-foreground transition hover:brightness-95 disabled:opacity-60"
+          className="h-auto rounded-lg bg-accent px-8 py-3 text-sm font-medium text-accent-foreground transition hover:bg-accent/90 disabled:opacity-60"
         >
           {sending ? "Sending…" : nextLabel}
-        </button>
+        </Button>
       </div>
     </div>
   );
