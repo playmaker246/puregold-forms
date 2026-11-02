@@ -10,13 +10,21 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ExpressPrintingRouteImport } from './routes/express-printing'
 import { Route as PackagingRouteImport } from './routes/packaging'
 import { Route as PrintingRouteImport } from './routes/printing'
 import { Route as ThankYouRouteImport } from './routes/thank-you'
+import { Route as ExpressPrintingIndexRouteImport } from './routes/express-printing.index'
+import { Route as ExpressPrintingThankYouRouteImport } from './routes/express-printing.thank-you'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExpressPrintingRoute = ExpressPrintingRouteImport.update({
+  id: '/express-printing',
+  path: '/express-printing',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PackagingRoute = PackagingRouteImport.update({
@@ -34,36 +42,76 @@ const ThankYouRoute = ThankYouRouteImport.update({
   path: '/thank-you',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ExpressPrintingIndexRoute = ExpressPrintingIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ExpressPrintingRoute,
+} as any)
+const ExpressPrintingThankYouRoute = ExpressPrintingThankYouRouteImport.update({
+  id: '/thank-you',
+  path: '/thank-you',
+  getParentRoute: () => ExpressPrintingRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/express-printing': typeof ExpressPrintingRouteWithChildren
   '/packaging': typeof PackagingRoute
   '/printing': typeof PrintingRoute
   '/thank-you': typeof ThankYouRoute
+  '/express-printing/thank-you': typeof ExpressPrintingThankYouRoute
+  '/express-printing/': typeof ExpressPrintingIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/packaging': typeof PackagingRoute
   '/printing': typeof PrintingRoute
   '/thank-you': typeof ThankYouRoute
+  '/express-printing/thank-you': typeof ExpressPrintingThankYouRoute
+  '/express-printing': typeof ExpressPrintingIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/express-printing': typeof ExpressPrintingRouteWithChildren
   '/packaging': typeof PackagingRoute
   '/printing': typeof PrintingRoute
   '/thank-you': typeof ThankYouRoute
+  '/express-printing/thank-you': typeof ExpressPrintingThankYouRoute
+  '/express-printing/': typeof ExpressPrintingIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/packaging' | '/printing' | '/thank-you'
+  fullPaths:
+    | '/'
+    | '/express-printing'
+    | '/packaging'
+    | '/printing'
+    | '/thank-you'
+    | '/express-printing/thank-you'
+    | '/express-printing/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/packaging' | '/printing' | '/thank-you'
-  id: '__root__' | '/' | '/packaging' | '/printing' | '/thank-you'
+  to:
+    | '/'
+    | '/packaging'
+    | '/printing'
+    | '/thank-you'
+    | '/express-printing/thank-you'
+    | '/express-printing'
+  id:
+    | '__root__'
+    | '/'
+    | '/express-printing'
+    | '/packaging'
+    | '/printing'
+    | '/thank-you'
+    | '/express-printing/thank-you'
+    | '/express-printing/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ExpressPrintingRoute: typeof ExpressPrintingRouteWithChildren
   PackagingRoute: typeof PackagingRoute
   PrintingRoute: typeof PrintingRoute
   ThankYouRoute: typeof ThankYouRoute
@@ -76,6 +124,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/express-printing': {
+      id: '/express-printing'
+      path: '/express-printing'
+      fullPath: '/express-printing'
+      preLoaderRoute: typeof ExpressPrintingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/packaging': {
@@ -99,11 +154,40 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ThankYouRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/express-printing/': {
+      id: '/express-printing/'
+      path: '/'
+      fullPath: '/express-printing/'
+      preLoaderRoute: typeof ExpressPrintingIndexRouteImport
+      parentRoute: typeof ExpressPrintingRoute
+    }
+    '/express-printing/thank-you': {
+      id: '/express-printing/thank-you'
+      path: '/thank-you'
+      fullPath: '/express-printing/thank-you'
+      preLoaderRoute: typeof ExpressPrintingThankYouRouteImport
+      parentRoute: typeof ExpressPrintingRoute
+    }
   }
 }
 
+interface ExpressPrintingRouteChildren {
+  ExpressPrintingThankYouRoute: typeof ExpressPrintingThankYouRoute
+  ExpressPrintingIndexRoute: typeof ExpressPrintingIndexRoute
+}
+
+const ExpressPrintingRouteChildren: ExpressPrintingRouteChildren = {
+  ExpressPrintingThankYouRoute: ExpressPrintingThankYouRoute,
+  ExpressPrintingIndexRoute: ExpressPrintingIndexRoute,
+}
+
+const ExpressPrintingRouteWithChildren = ExpressPrintingRoute._addFileChildren(
+  ExpressPrintingRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ExpressPrintingRoute: ExpressPrintingRouteWithChildren,
   PackagingRoute: PackagingRoute,
   PrintingRoute: PrintingRoute,
   ThankYouRoute: ThankYouRoute,
