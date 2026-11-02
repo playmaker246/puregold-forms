@@ -1,4 +1,4 @@
-export type FieldType = "text" | "tel" | "radio" | "checkbox" | "textarea";
+export type FieldType = "text" | "tel" | "number" | "select" | "radio" | "checkbox" | "textarea";
 
 export interface FormField {
   id: string;
@@ -11,10 +11,12 @@ export interface FormField {
   placeholder?: string;
   /** Only show this field when the given field's answer starts with "Yes". */
   showIfYes?: string;
+  showIfEquals?: { field: string; value: string };
+  screen?: number;
 }
 
 export interface FormConfig {
-  slug: "printing" | "packaging";
+  slug: "printing" | "packaging" | "express-printing";
   tab: string;
   title: string;
   kicker: string;
@@ -205,13 +207,37 @@ export const packagingForm: FormConfig = {
   ],
 };
 
-export const forms = { printing: printingForm, packaging: packagingForm } as const;
+export const expressPrintingForm: FormConfig = {
+  slug: "express-printing",
+  tab: "Express",
+  title: "Express Printing Jobs",
+  kicker: "Express print enquiry",
+  blurb: "",
+  fields: [
+    { id: "name", label: "Full Name", type: "text", placeholder: "Full name", screen: 1 },
+    { id: "whatsapp", label: "WhatsApp Number", type: "number", placeholder: "e.g. 0803 000 0000", screen: 1 },
+    { id: "needPrinted", label: "What do you need printed?", type: "select", options: ["Stickers", "Business Cards", "Flyers/Posters", "Banners", "Branded Shirts", "Other"], screen: 2 },
+    { id: "otherPrinted", label: "Please specify what you need", type: "text", showIfEquals: { field: "needPrinted", value: "Other" }, screen: 2 },
+    { id: "quantity", label: "What quantity do you need?", type: "text", screen: 2 },
+    { id: "design", label: "Do you already have your design file?", type: "select", options: ["Yes, I have it ready", "No, I need quick design help"], screen: 3 },
+    { id: "urgent", label: "Do you need this urgently?", type: "select", options: ["Yes, within 1-2 days", "No, I can wait a few days"], screen: 3 },
+  ],
+};
+
+export const forms = { printing: printingForm, packaging: packagingForm, "express-printing": expressPrintingForm } as const;
 
 export function visibleFields(config: FormConfig, answers: Record<string, string>) {
   return config.fields.filter((f) => {
+    if (f.showIfEquals) return answers[f.showIfEquals.field] === f.showIfEquals.value;
     if (!f.showIfYes) return true;
     return (answers[f.showIfYes] ?? "").startsWith("Yes");
   });
+}
+
+export function formScreens(config: FormConfig, answers: Record<string, string>) {
+  const fields = visibleFields(config, answers);
+  if (config.slug !== "express-printing") return chunkFields(fields);
+  return [1, 2, 3].map((screen) => fields.filter((f) => f.screen === screen));
 }
 
 export function chunkFields(fields: FormField[], size = 2) {
