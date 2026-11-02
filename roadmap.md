@@ -4,3 +4,4 @@
 - [x] Team emails via Gmail after each sheet save.
 - [x] Add insert-only Supabase funnel events and privacy-safe logging for both forms.
 - [x] Test event validation, access restrictions and successful form flows.
+- [x] Packaging form conversion improvements: intro reassurance, per-step progress messages, new button labels, final-button notes, packaging thank-you line. Verified both branches; test rows removed.
