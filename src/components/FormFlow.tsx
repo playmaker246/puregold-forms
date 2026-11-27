@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { formScreens, type FormConfig, type FormField } from "@/lib/forms";
+import { formScreens, optionsFor, type FormConfig, type FormField } from "@/lib/forms";
 import { expressScreenError } from "@/lib/express-validation";
 import { Button } from "@/components/ui/button";
 import { submitLead } from "@/lib/submit.functions";
@@ -39,7 +39,12 @@ export function FormFlow({ config }: { config: FormConfig }) {
       : "Next";
 
   const set = (id: string, value: string) => {
-    setAnswers((a) => ({ ...a, [id]: value }));
+    setAnswers((a) => {
+      if (config.slug === "express-printing" && id === "needPrinted" && a["needPrinted"] !== value) {
+        return { ...a, needPrinted: value, quantityChoice: "", quantity: "" };
+      }
+      return { ...a, [id]: value };
+    });
     setError(null);
   };
 
@@ -100,7 +105,14 @@ export function FormFlow({ config }: { config: FormConfig }) {
         content_category: "Lead Form",
       });
       if (config.slug === "express-printing") {
-        navigate({ to: "/express-printing/thank-you" });
+        navigate({
+          to: "/express-printing/thank-you",
+          search: {
+            name: answers["name"] ?? "",
+            product: answers["needPrinted"] === "Other" ? (answers["otherPrinted"] ?? "") : (answers["needPrinted"] ?? ""),
+            quantity: answers["quantityChoice"] === "Custom quantity" ? (answers["quantity"] ?? "") : (answers["quantityChoice"] ?? ""),
+          },
+        });
       } else {
         navigate({ to: "/thank-you", search: { name: res.name, form: config.slug } });
       }
@@ -178,7 +190,7 @@ export function FormFlow({ config }: { config: FormConfig }) {
                   className="w-full min-w-0 rounded-lg border border-input bg-background px-4 py-3 text-sm text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-ring/40"
                 >
                   <option value="" disabled>Select an option</option>
-                  {f.options?.map((opt) => <option key={opt} value={opt}>{opt}</option>)}
+                  {optionsFor(config, f, answers).map((opt) => <option key={opt} value={opt}>{opt}</option>)}
                 </select>
               )}
 

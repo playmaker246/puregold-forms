@@ -207,6 +207,8 @@ export const packagingForm: FormConfig = {
   ],
 };
 
+export const CUSTOM_QUANTITY = "Custom quantity";
+
 export const expressPrintingForm: FormConfig = {
   slug: "express-printing",
   tab: "Express",
@@ -218,11 +220,35 @@ export const expressPrintingForm: FormConfig = {
     { id: "whatsapp", label: "WhatsApp Number", type: "number", placeholder: "e.g. 0803 000 0000", screen: 1 },
     { id: "needPrinted", label: "What do you need printed?", type: "select", options: ["Stickers", "Business Cards", "Flyers/Posters", "Banners", "Branded Shirts", "Other"], screen: 2 },
     { id: "otherPrinted", label: "Please specify what you need", type: "text", showIfEquals: { field: "needPrinted", value: "Other" }, screen: 2 },
-    { id: "quantity", label: "What quantity do you need?", type: "text", screen: 2 },
+    { id: "quantityChoice", label: "What quantity do you need?", type: "select", screen: 2 },
+    {
+      id: "quantity",
+      label: "Enter your quantity",
+      type: "text",
+      placeholder: "e.g. 250",
+      showIfEquals: { field: "quantityChoice", value: CUSTOM_QUANTITY },
+      screen: 2,
+    },
     { id: "design", label: "Do you already have your design file?", type: "select", options: ["Yes, I have it ready", "No, I need quick design help"], screen: 3 },
     { id: "urgent", label: "Do you need this urgently?", type: "select", options: ["Yes, within 1-2 days", "No, I can wait a few days"], screen: 3 },
   ],
 };
+
+export const expressQuantityChoices: Record<string, string[]> = {
+  Stickers: ["50", "100", "250", "500", "1,000", CUSTOM_QUANTITY],
+  "Business Cards": ["100", "250", "500", "1,000", "2,000", CUSTOM_QUANTITY],
+  "Flyers/Posters": ["100", "250", "500", "1,000", CUSTOM_QUANTITY],
+  Banners: ["1", "2", "5", "10", "25", CUSTOM_QUANTITY],
+  "Branded Shirts": ["5", "10", "25", "50", CUSTOM_QUANTITY],
+  Other: [CUSTOM_QUANTITY],
+};
+
+export function optionsFor(config: FormConfig, field: FormField, answers: Record<string, string>): string[] {
+  if (config.slug === "express-printing" && field.id === "quantityChoice") {
+    return expressQuantityChoices[answers["needPrinted"] ?? ""] ?? [CUSTOM_QUANTITY];
+  }
+  return field.options ?? [];
+}
 
 export const forms = { printing: printingForm, packaging: packagingForm, "express-printing": expressPrintingForm } as const;
 
