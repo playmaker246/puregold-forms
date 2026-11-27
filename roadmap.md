@@ -1,4 +1,4 @@
-- [ ] Add Express Printing Jobs with three screens, conditional Other, separate confirmation, and verified Sheet/email saves.
+- [x] Add Express Printing Jobs with three screens, conditional Other, separate confirmation, and verified Sheet/email saves.
 - [x] Replace thank-you copy and remove the video placeholder.
 - [x] Verify submissions reach both separate Google Sheets and remove test entries.
 - [x] Apply the required package security update and check the app.
